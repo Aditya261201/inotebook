@@ -9,6 +9,10 @@ var jwt = require('jsonwebtoken');
 
 const JWT_SECRET = '$aadiisagoodboy$'    // its a secret key by which we can authenticate the access of a user.this key is a part of authentication token.
 
+
+
+
+//                              ------------------------**************************-------------------------
 // Create a user using : POST "/api/auth/createuser". Doesn't require auth.(No login required)
 router.post('/createuser', [
     // array holding all the validations.
@@ -50,10 +54,57 @@ router.post('/createuser', [
     }
     catch(error){
         console.error(error.message)
-        res.status(500).send("Some error occured")
+        res.status(500).send("Internal Server Error !! ")
     }
 
     
+})
+
+
+
+
+
+
+
+
+//                              ------------------------**************************-------------------------
+// Authenticate a user using : POST "/api/auth/login" 
+router.post('/login', [
+    body('email','enter a valid email').isEmail(),
+    body('password','password must be at least 5 characters.').exists(),
+],async (req, res)=>{ 
+    // if there are errors then rerturn bad request and the errors
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
+
+
+    const{email, password} = req.body;
+    try {
+        let user =await User.findOne({email});
+        if(!user){
+            return res.status(500).json({error : "Please try to login with correct credentials"});
+        }
+
+        const passwordCompare =await bcrypt.compare(password, user.password);
+        if(!passwordCompare){
+            return res.status(500).json({error : "Please try to login with correct credentials"});
+        }
+
+        const data = {
+            user:{
+                id: user.id
+            }
+        }
+        const authToken = jwt.sign(data, JWT_SECRET)        // here we will sign the data with our secret key to make authtoken 
+        res.json({authToken})
+
+    }catch(error){
+        console.error(error.message);
+        res.status(500).send("Internal Server Error !! ");
+    }
 })
 
 
