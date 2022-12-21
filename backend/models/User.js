@@ -22,5 +22,4 @@ const UserSchema = new Schema({
 }); 
 
 const User = mongoose.model('User', UserSchema);
-User.createIndexes();  // create index of user so that duplicates cant be added..(i.e.  email is unique in this case)
 module.exports = User
