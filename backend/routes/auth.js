@@ -2,7 +2,7 @@ const express = require('express');
 const User = require('../models/User')
 const router = express.Router();
 const { body, validationResult } = require('express-validator'); //express validator
-
+const bcrypt = require('bcrypt');
 
 
 
@@ -12,24 +12,31 @@ router.post('/createuser', [
     body('name','enter a valid name').isLength({min:3}),
     body('email','enter a valid email').isEmail(),
     body('password','password must be at least 5 characters.').isLength({min:5}),
-],async (req, res)=>{    
+],async (req, res)=>{  
+    
     // if there are errors then rerturn bad request and the errors  (snippet taken from express-validator docs.)
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
     }
+
     // Check whether the user with the same email exists already.(and all that in try-catch block if any error occur)
     try{
+
         let user = await User.findOne({ email: req.body.email})   // chacking if the user with same email exists already
         if(user){// if the user with the same email exists already then showing error
             return res.status(400).json({error: "Sorry, user with this email already exists"})
         }
-        // If doesn't exist then creates a new user.
-        user = await User.create({ // create a new user (await- waits until user is created)
+
+
+        const salt =await bcrypt.genSalt(10);                      // salt is generated to be added in password.(await bcos we cant proceed without salt)
+        const secPass =await bcrypt.hash(req.body.password,salt);   // salt is added in the hashed password.(await bcos hashed(or maybe salted also) password is compulsory to proceed.)
+        user = await User.create({                           // create a new user (await- waits until user is created)
             name: req.body.name,
             email: req.body.email,
-            password: req.body.password
+            password: secPass                           // now secured password will be saved as a salted hash in db.
         })
+
         res.json({user})              // sends the user json in response
     }
     catch(error){
