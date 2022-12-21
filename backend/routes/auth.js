@@ -4,6 +4,7 @@ const router = express.Router();
 const { body, validationResult } = require('express-validator'); //express validator
 const bcrypt = require('bcrypt');
 var jwt = require('jsonwebtoken');
+var fetchuser = require('../middleware/fetchuser');
 
 
 
@@ -12,7 +13,7 @@ const JWT_SECRET = '$aadiisagoodboy$'    // its a secret key by which we can aut
 
 
 
-//                              ------------------------**************************-------------------------
+//            ROUTE-1                  ------------------------**************************-------------------------
 // Create a user using : POST "/api/auth/createuser". Doesn't require auth.(No login required)
 router.post('/createuser', [
     // array holding all the validations.
@@ -67,7 +68,7 @@ router.post('/createuser', [
 
 
 
-//                              ------------------------**************************-------------------------
+//           ROUTE-2                   ------------------------**************************-------------------------
 // Authenticate a user using : POST "/api/auth/login" 
 router.post('/login', [
     body('email','enter a valid email').isEmail(),
@@ -107,5 +108,29 @@ router.post('/login', [
     }
 })
 
+
+
+
+
+
+
+
+
+
+//           ROUTE-3                   ------------------------**************************-------------------------
+// Getting loggedin  Userdetails  using : POST "/api/auth/getuser" 
+
+// here we have used fetchuser function(that's a middleware) before async func , it will fetch the userid the authtoken given by the user.
+// we can also have written fetchuser code here but, then we have to copy that in everyendpoint where we have to authenticate the user.so we made that as a midddleware.
+router.post('/getuser',fetchuser,async (req, res)=>{ 
+    try{
+        userId = req.user.id;                    // userId is the id of the user fetched from the authtoken
+        const user = await User.findById(userId).select("-password")          // select all the details of that user except the password.
+        res.send(user)                                          // sends the useer details in response(except password as selected above.)
+    }catch(error){   // if any error occurs.
+        console.error(error.message);
+        res.status(500).send("Internal Server Error !! ");
+    }
+})
 
 module.exports = router
