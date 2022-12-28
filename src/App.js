@@ -6,6 +6,7 @@ import {
 import Navbar from './Components/Navbar';
 import Home from './Components/Home';
 import About from './Components/About';
+import NoteState from './Context/notes/NoteState';
 
 
 
@@ -13,6 +14,8 @@ import About from './Components/About';
 function App() {
   return (
     <>
+    {/* wrap our app in <notestate> tags i.e. the components inside notestate and their childerns can have the access to the context(states,functions..) */}
+    <NoteState>
       <BrowserRouter>
       <Navbar/>
         <Routes>
@@ -21,6 +24,7 @@ function App() {
         {/* <Route exact path="/users" element={<Users/>}/> */}
         </Routes>
       </BrowserRouter>
+    </NoteState>
     </>
   );
 }
