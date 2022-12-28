@@ -1,6 +1,9 @@
-import React from 'react'
+import React,{ useContext } from 'react'
+import Notes from './Notes'
+
 
 const Home = () => {
+
     return (
         <div>
             <div className="container my-4">
@@ -25,7 +28,8 @@ const Home = () => {
 
 
             <div className="container my-4">
-            <h1>Your Notes</h1>
+            {/* notes component */}
+            <Notes/>
             </div>
         </div>
     )
