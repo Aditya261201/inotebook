@@ -6,9 +6,6 @@ import {Link,useLocation} from 'react-router-dom'
 const Navbar = () => {
 
     let location = useLocation();    // This hook returns the current location object. This can be useful if you'd like to perform some side effect whenever the current location changes.
-    useEffect(() => {
-        console.log(location.pathname);
-    }, [location]);
 
     return (
         <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
