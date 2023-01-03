@@ -1,12 +1,12 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 
 
 
-const Signup = () => {
+const Signup = (props) => {
     const host = "http://localhost:5000"
 
-    const [credentials, setcredentials] = useState({name: "", email: "", password: "" ,cpassword: ""})
+    const [credentials, setcredentials] = useState({ name: "", email: "", password: "", cpassword: "" })
     const navigate = useNavigate();   // useNavigate hook
 
 
@@ -17,13 +17,19 @@ const Signup = () => {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({name: credentials.name, email: credentials.email, password: credentials.password, cpassword: credentials.cpassword})
+            body: JSON.stringify({ name: credentials.name, email: credentials.email, password: credentials.password, cpassword: credentials.cpassword })
         });
         const json = await response.json();
         console.log(json);
+        if (json.success) {
             //save the authtoken and redirect 
             localStorage.setItem('token', json.authtoken)
             navigate("/");
+            props.showAlert("Account created successfully", "success")
+        }
+        else {
+            props.showAlert("invalid credentials", "danger")
+        }
     }
 
 
@@ -36,7 +42,7 @@ const Signup = () => {
             <form onSubmit={handleClick}>
                 <div className="mb-3">
                     <label htmlFor="name" className="form-label">Name</label>
-                    <input type="text" className="form-control" id="name" name="name" onChange={onChange} required/>
+                    <input type="text" className="form-control" id="name" name="name" onChange={onChange} required />
                 </div>
                 <div className="mb-3">
                     <label htmlFor="email" className="form-label">Email address</label>
