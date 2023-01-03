@@ -31,8 +31,8 @@ const Notes = () => {
 
     //handle click when we click on addnote submit button.
     const handleClick = (e) => {
-        console.log("updating note..", note)
-        console.log(note.id)
+        // console.log("updating note..", note)
+        // console.log(note.id)
         editNote(note.id, note.etitle,note.edescription,note.etag);
         refClose.current.click();    // close the modal
     } 
@@ -56,11 +56,11 @@ const Notes = () => {
                             {/* form to edit note */}
                             <div className="mb-3">
                                 <label htmlFor="etitle" className="form-label">Title</label>
-                                <input type="text" className="form-control" id="etitle" name="etitle" value={note.etitle} aria-describedby="emailHelp" onChange={onChange} />
+                                <input type="text" className="form-control" id="etitle" name="etitle" value={note.etitle} minlength={3} aria-describedby="emailHelp" onChange={onChange} />
                             </div>
                             <div className="mb-3">
                                 <label htmlFor="edescription" className="form-label">Description</label>
-                                <input type="text" className="form-control" id="edescription" name="edescription" value={note.edescription} onChange={onChange} />
+                                <input type="text" className="form-control" id="edescription" name="edescription" value={note.edescription} minlength={5} onChange={onChange} />
                             </div>
                             <div className="mb-3">
                                 <label htmlFor="etag" className="form-label">Tag</label>
@@ -69,17 +69,20 @@ const Notes = () => {
                         </div>
                         <div className="modal-footer">
                             <button type="button" ref={refClose} className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="button" onClick={handleClick} className="btn btn-primary">Update Note</button>
+                            <button type="button" disabled={note.etitle.length < 3 || note.edescription.length < 5} onClick={handleClick} className="btn btn-primary">Update Note</button>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div className="row my-3">
-                <h1>Your Notes</h1>
-                {notes.map((note) => {
-                    return <Noteitem note={note} updateNote={updateNote} key={note._id} />
-                })}
+            <div className="container row my-3">
+                <div className="contaier">
+                    <h1>Your Notes</h1>
+                    {notes.length === 0 && "No notes to display "}
+                    {notes.map((note) => {
+                        return <Noteitem note={note} updateNote={updateNote} key={note._id} />
+                    })}
+                </div>
             </div>
         </>
     )

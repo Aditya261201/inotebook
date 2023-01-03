@@ -5,8 +5,9 @@ const Noteitem = (props) => {
 
     const context = useContext(noteContext);   // using noteContext
     const {deleteNote} = context; 
+    const {note, updateNote } = props;
 
-    const { note,updateNote } = props;
+
     return (
         <div className="col-md-3 my-2">
             <div className="card" style={{"border": '1px solid black'}}>
