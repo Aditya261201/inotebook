@@ -56,11 +56,11 @@ const Notes = () => {
                             {/* form to edit note */}
                             <div className="mb-3">
                                 <label htmlFor="etitle" className="form-label">Title</label>
-                                <input type="text" className="form-control" id="etitle" name="etitle" value={note.etitle} minlength={3} aria-describedby="emailHelp" onChange={onChange} />
+                                <input type="text" className="form-control" id="etitle" name="etitle" value={note.etitle} aria-describedby="emailHelp" onChange={onChange} />
                             </div>
                             <div className="mb-3">
                                 <label htmlFor="edescription" className="form-label">Description</label>
-                                <input type="text" className="form-control" id="edescription" name="edescription" value={note.edescription} minlength={5} onChange={onChange} />
+                                <input type="text" className="form-control" id="edescription" name="edescription" value={note.edescription} onChange={onChange} />
                             </div>
                             <div className="mb-3">
                                 <label htmlFor="etag" className="form-label">Tag</label>
