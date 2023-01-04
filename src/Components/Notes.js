@@ -2,16 +2,23 @@ import React, { useContext, useEffect, useRef, useState} from 'react'
 import noteContext from "../Context/notes/noteContext"
 import AddNote from './AddNote';
 import Noteitem from './Noteitem';
+import { useNavigate } from 'react-router-dom';
 
 const Notes = (props) => {
 
     const context = useContext(noteContext);   // using noteContext
     const { notes, getNotes, editNote } = context;
+    const navigate = useNavigate();   // useNavigate hook
     
 
     // to get all the notes on the frontend from backend
     useEffect(() => {
+        if(localStorage.getItem('token')){
         getNotes()
+        }
+        else{  
+        navigate("/login");
+        }
         // eslint-disable-next-line
     }, [])
 

@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
-
+// var localStorage = require('localStorage')
 
 
 const Signup = (props) => {
@@ -23,7 +23,7 @@ const Signup = (props) => {
         console.log(json);
         if (json.success) {
             //save the authtoken and redirect 
-            localStorage.setItem('token', json.authtoken)
+            localStorage.setItem('token', json.authToken)
             navigate("/");
             props.showAlert("Account created successfully", "success")
         }
@@ -38,7 +38,8 @@ const Signup = (props) => {
     }
 
     return (
-        <div className="container">
+        <div className="container my-3">
+        <h2 className="mb-3">Signup to iNotebook</h2>
             <form onSubmit={handleClick}>
                 <div className="mb-3">
                     <label htmlFor="name" className="form-label">Name</label>
@@ -56,7 +57,7 @@ const Signup = (props) => {
                     <label htmlFor="cpassword" className="form-label">Confirm Password</label>
                     <input type="password" className="form-control" id="cpassword" name="cpassword" onChange={onChange} required />
                 </div>
-                <button type="submit" className="btn btn-primary">Submit</button>
+                <button disabled={credentials.cpassword !== credentials.password} type="submit" className="btn btn-primary">Signup</button>
             </form>
         </div>
     )
